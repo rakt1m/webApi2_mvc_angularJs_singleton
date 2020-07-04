@@ -1,11 +1,13 @@
 ﻿<!DOCTYPE html>
-<html>
+<html  ng-app="Homeapp">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/assets/angular/lib/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -20,9 +22,8 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Employee", "Employee", "Employees")</li>
+                
                 </ul>
             </div>
         </div>
@@ -37,6 +38,12 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+<script src="~/assets/angular/lib/angular.min.js"></script>
+<script src="~/assets/angular/lib/toastr.min.js"></script>
+<script src="~/assets/angular/lib/dirPagination.js"></script>
+<script src="~/assets/angular/lib/SweetAlert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="~/Scripts/angularcotroller/App.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

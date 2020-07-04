@@ -16,7 +16,7 @@ namespace webApi2_mvc_angularJs_singleton
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Employees", action = "Employee", id = UrlParameter.Optional }
             );
         }
     }

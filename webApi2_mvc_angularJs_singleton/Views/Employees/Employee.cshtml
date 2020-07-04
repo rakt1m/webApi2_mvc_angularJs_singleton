@@ -1,0 +1,314 @@
+﻿
+@{
+    ViewBag.Title = "Employee";
+}
+
+<div ng-controller="EmController">
+    <!-- Begin: life time stats -->
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-green"></i>
+                <span class="caption-subject font-green sbold uppercase">@ViewBag.Title</span>
+            </div>
+            <div class="actions">
+                <div class="btn-group btn-group-solid">
+                    <button ng-click="resetForm()" class="btn green" data-target="#addmodal" data-toggle="modal"> <i class="fa fa-plus"></i> Add New</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="table-container">
+                <div id="sample_3_wrapper" class="dataTables_wrapper no-footer">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-5 col-xs-6">
+                            <div class="form-group">
+                                <div class="col-lg-3 col-md-5 col-sm-4 col-xs-8" style="padding-left:0px">
+                                    <select class="form-control" ng-model="pageSize" ng-options="P.value as P.text for P in pageSizeArray"></select>
+                                </div>
+                                <div class="col-md-7  col-sm-8  col-xs-4">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-3 col-xs-1">
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-5">
+                            <div id="sample_3_filter" class="pull-right">
+                                <input ng-model="q" id="search" class="form-control" placeholder="Filter text">
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="table-scrollable"> </div>*@
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="btn-primary">
+                                <th> Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+
+                                <th style="text-align:center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-show="Employees.results.length <=0"><td colspan="4" style="text-align:center;"><i class="fa fa-refresh"></i> No Data Exists!!</td></tr>
+                            <tr dir-paginate="item in Employees| filter:q  | itemsPerPage: pageSize" current-page="currentPage" @*ng-repate="item in Employees"*@>
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Email}}</td>
+                                <td>{{item.Phone}}</td>
+
+                                <td align="center">
+                                    <a @*ng-show="item.Id==0"*@ ng-click="edit(item)" data-target="#addmodal" data-toggle="modal"><i class="fa fa-edit"></i> Edit</a>
+                                    <a @*ng-show="item.Id==0"*@ ng-click="deleteEmp(item)"><i class="fa fa-trash"></i> Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <dir-pagination-controls boundary-links="true" template-url="~/assets/angular/lib/dirPagination.tpl.html"></dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- End: life time stats -->
+    <!--Modal Area Start-->
+    <div id="addmodal" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="addform" ng-submit="save()" class="form-horizontal" id="form_sample_1" novalidate autocomplete="off">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="getFisYears()">X</button>
+                        <h4 class="modal-title">{{modalTitle}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group" ng-class="{ 'has-error' : submitted && addform.name.$invalid}">
+                                        <label class="col-md-4 control-label">
+                                            Name:
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input type="text" ng-model="Employee.Name" class="form-control" placeholder=" Name" name="name" required>
+                                            <div class="form-control-focus"> </div>
+                                            <span ng-show="submitted &&  addform.name.$error.required" class="help-block">Name Required</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" ng-class="{ 'has-error' : submitted && addform.email.$invalid}">
+                                        <label class="col-md-4 control-label">
+                                            Email:
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input type="text" ng-model="Employee.Email" class="form-control" placeholder=" Email" name="email" required>
+                                            <div class="form-control-focus"> </div>
+                                            <span ng-show="submitted &&  addform.email.$error.required" class="help-block">email Required</span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group" ng-class="{ 'has-error' : submitted && addform.phone.$invalid}">
+                                        <label class="col-md-4 control-label">
+                                            Phone:
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input type="text" ng-model="Employee.Phone" class="form-control" placeholder=" phone" name="phone" required>
+                                            <div class="form-control-focus"> </div>
+                                            <span ng-show="submitted &&  addform.phone.$error.required" class="help-block">phone Required</span>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn dark btn-outline" ng-click="getFisYears();resetForm();submitted=false">Cancel</button>
+                        <button type="submit" ng-click="submitted=true" class="btn green-haze">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Modal Area End-->
+
+</div>
+
+@section Scripts{
+
+
+    <script type="text/javascript">
+
+
+        App.controller("EmController", ["$scope", "$http", "SweetAlert", "$filter",
+            function ($scope, $http, SweetAlert, $filter) {
+
+                init();
+                function init() {
+                    initialize();
+                    getEmp();
+
+                }
+                function initialize() {
+                    $scope.modalTitle = "Add Employee";
+                    $scope.Employees = [];
+                    $scope.Employee = {}
+                    $scope.Employee.Id = 0;
+                    $scope.Id = '';
+                    $scope.currentPage = 1;
+                    $scope.pageno = 1;
+                    $scope.pagesize = 10;
+                    $scope.total_count = 12;
+
+                    $scope.getEmp = getEmp;
+                    $scope.res = {};
+                    $scope.data = {};
+                    $scope.resetForm = resetForm;
+                    $scope.hstep = 1;
+                    $scope.mstep = 15;
+
+                    $scope.pageSizeArray = [];
+                    $scope.pageSizeArray.push({ value: 5, text: 5 });
+                    $scope.pageSizeArray.push({ value: 10, text: 10 });
+                    $scope.pageSizeArray.push({ value: 20, text: 20 });
+                    $scope.pageSizeArray.push({ value: 50, text: 50 });
+                    $scope.currentPage = 1;
+                    $scope.pageSize = 10;
+
+                }
+                function resetForm() {
+                    $scope.modalTitle = "Add Employee";
+
+
+                    $scope.Employee.Id = 0;
+                    $scope.addform.$setUntouched();
+                    $scope.addform.$setPristine();
+                    $scope.submitted = false;
+                }
+
+                function getEmp() {
+                    $scope.Employees = [];
+                    $http({
+                        method: 'GET',
+                        url: baseUrl+'Employee/GetAllEmployee/'
+                    }).then(function successCallback(response) {
+                        $scope.Employees = response.data.results;
+                        console.log($scope.Employees);
+
+                    }, function errorCallback(response) {
+                        toastr["warning"](response.data.Message);
+                    });
+                }
+
+
+
+
+
+
+
+
+
+
+
+                $scope.edit = function (n) {
+                    $scope.modalTitle = "Edit  Employee ";
+                    $scope.Employee = n;
+                    $scope.Id = n.Id;
+
+                };
+                $scope.save = function save() {
+                    if ($scope.addform.$invalid)
+                        return;
+
+
+                    if ($scope.Employee.Id != 0) /// For Update
+                    {
+                        if ($scope.Employee != '') {
+                            $http({
+                                method: 'PUT',
+                                url: baseUrl +'Employee/UpE/',
+                                data: $scope.Employee
+                            }).then(function successCallback(response) {
+
+                                $('#addmodal').modal('toggle');
+                                getEmp();
+                                toastr["info"](response.data.message);
+                                resetForm();
+                            }, function errorCallback(response) {
+                                 toastr["warning"](response.data.Message);
+                                $('#addmodal').modal('toggle');
+                                resetForm();
+                                getEmp();
+                            });
+                        }
+                    } else {  //  For Add
+                        if ($scope.Employee != {}) {
+                            $http({
+                                method: 'POST',
+                                url: baseUrl +'Employee/AddE/',
+                                data: $scope.Employee
+                            }).then(function successCallback(response) {
+                                resetForm();
+                                $('#addmodal').modal('toggle');
+                                getEmp();
+                                 toastr["info"](response.data.message);
+
+                            }, function errorCallback(response) {
+                                  toastr["warning"](response.data.Message);
+                            });
+                        }
+                    }
+                };
+                $scope.deleteEmp = function deleteEmp(n) {
+
+
+                    swal({
+                        title: "Are you sure to delete it ?",
+                            text: "Once deleted, you will not be able to recover this file!",
+                            icon: "warning",
+                        buttons: true,
+
+                            dangerMode: true,
+                        })
+                        .then((willDelete) => {
+                            if (willDelete) {
+
+                                if (n.Id != 0) {
+                                    n.IsDeleted = true;
+                                    $http({
+                                        method: 'POST',
+                                        url: baseUrl +'Employee/DeleteE/',
+                                        data: n
+                                    }).then(function successCallback(response) {
+                                        getEmp();
+                                        console.log(response);
+
+                                        swal("Deleted!", "Your data has been deleted.", {
+                                            icon: "success",
+
+                                        });
+                                    }, function errorCallback(response) {
+                                        toastr["warning"](response.data.Message);
+                                        getEmp();
+                                    });
+                                }
+                            }
+
+                            //else {
+                            //    swal("Your imaginary file is safe!");
+                            //}
+                        });
+                };//end dlt
+            }]);
+
+    </script>
+
+}
